@@ -1,52 +1,27 @@
 const http = require('http');
 const express = require('express');
-// const session = require('express-session');
-// const cookieParser = require('cookie-parser')
-// const passport = require('passport');
-// const passportConfig = require('./config/passportLocal')
+const morgan = require('morgan')
 const cors = require('cors');
-// const webSettings = require('./config/webSettings')
-// const flash = require('connect-flash')
-// const router = express.Router();
+const authMiddleware = require('./configs/authMiddleware')
 const app = express();
 
+app.use(express.json())
 app.set('resCode', require('./configs/responseCode'))
 app.set('jwtSettings', require('./configs/jwtSettings'))
-
-app.use(express.json())
-// app.use(session(webSettings.sessionSettings))
-// app.use(cookieParser())
-// app.use(passport.initialize());
-// app.use(passport.session());
-// deserialization occurs prior to [server call time] ??
-// passportConfig();
 app.set('port', process.env.PORT || 3000);
 
 // app.use(cors(webSettings.corsSettings))
 // app.options('/login', cors(webSettings.corsSettings))
-// app.options('/isAuthenticated', cors(webSettings.corsSettings))
-// app.use(flash())
 
 app.use((req, res, next) => {
-    // console.log('current sessionID', req.session.id)
-    // console.log('passport check: ', req.session.passport)
     console.log('Server Call Time: ', Date.now())
     next()
 })
 
-// const isAuthenticated = (req, res, next) => {
-//     if (req.user || (req.session.passport && req.session.passport.user === 'supermanager@pool.com')) next()
-//     else {
-//         console.log('this session is not Authenticated')
-//         res.json({ response: false })
-//     }
-// }
-
 app.use('/user', require('./routes/user'))
-// app.use('/isAuthenticated', require('./routes/isAuthenticated'))
-// app.use('/pool', require('./routes/pool'))
-// app.use('/login', require('./routes/login'))
-// app.use('/admin', isAuthenticated, require('./routes/admin'))
+app.use('/admin', authMiddleware, (req, res) => {
+    res.json({ response: 'wow authenticated' })
+})
 // app.use('/logout', (req, res) => {
 //     // req.logout();
 //     // req.session.save(function () {

@@ -90,7 +90,7 @@ module.exports = {
                     id: result.id,
                     name: result.name,
                     email: result.email,
-                    conversionId: result.conversionId,
+                    conversionId: result.conversionid,
                 }, jwtSettings.secret, {
                     expiresIn: jwtSettings.expiresIn,
                     issuer: jwtSettings.issuer,
@@ -106,8 +106,8 @@ module.exports = {
             })
         }
 
-        const responseHandler = result => {
-            if (!result) {
+        const responseHandler = token => {
+            if (!token) {
                 res.json({
                     result: false,
                     code: resCode.wrongEmailOrPassword,
@@ -118,7 +118,7 @@ module.exports = {
                     result: true,
                     code: resCode.success,
                     data: {
-                        token: result,
+                        token,
                     }
                 })
             }

@@ -107,19 +107,22 @@ let sql_createTable_assessment =
         on delete cascade
     );`
 
+let sql_insert_conversion_1 =
+    `insert into ${dbSetting.conversion}(A1,A2,A3,B1,B2,B3,C1,C2,C3,D1,D2,D3,F) 
+    values(4.3,4.0,3.7,3.3,3.0,2.7,2.3,2.0,1.7,1.3,1.0,0.7,0);`
 
-// let sql_insertValues1 =
-//     `insert into ${dbSetting.tablename}(poolName,poolAddress,
-// poolPhone,poolTypeMask,poolOpentime,poolOption) 
-// values ('가나다 스포츠','서울 압구정동','010-1111-1111',17,1,5);`
-
+let sql_insert_conversion_2 =
+    `insert into ${dbSetting.conversion}(A1,A2,A3,B1,B2,B3,C1,C2,C3,D1,D2,D3,F) 
+    values(4.0,4.0,3.7,3.3,3.0,2.7,2.3,2.0,1.7,1.3,1.0,0.7,0);`
 
 let sqls2 = sql_createTable_conversion +
     sql_createTable_conversion2 +
     sql_createTable_user +
     sql_createTable_semester +
     sql_createTable_course +
-    sql_createTable_assessment
+    sql_createTable_assessment +
+    sql_insert_conversion_1 +
+    sql_insert_conversion_2
 
 let sql_register =
     `insert into ${dbSetting.table_user}(name,email,password,conversionid) 
@@ -176,13 +179,13 @@ module.exports = {
     initialSetup: sqls1,
     newDB: sql_createDB,
     createDummy: sqls2,
-    sql_create: sql_create,
-    sql_detail: sql_detail,
-    sql_select_totalCount: sql_select_totalCount,
-    sql_select: sql_select,
-    sql_adminBoard: sql_adminBoard,
-    sql_delete: sql_delete,
-    sql_update: sql_update,
+    // sql_create: sql_create,
+    // sql_detail: sql_detail,
+    // sql_select_totalCount: sql_select_totalCount,
+    // sql_select: sql_select,
+    // sql_adminBoard: sql_adminBoard,
+    // sql_delete: sql_delete,
+    // sql_update: sql_update,
     sql_findByEmail,
     sql_existByEmail,
     sql_register,
