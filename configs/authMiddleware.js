@@ -13,11 +13,13 @@ module.exports = (req, res, next) => {
         if (err) {
             return res.json({
                 result: false,
-                code: req.app.get('resCode').error,
+                // code: req.app.get('resCode').error,
+                code: req.app.get('resCode').notAuthenticated,
                 data: null,
             })
         }
         req.userInfo = decoded
+        console.log('decode', decoded)
         next()
     })
 }

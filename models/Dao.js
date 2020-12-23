@@ -15,6 +15,12 @@ class Dao {
     // because in class, written in 'strict mode'
 
     sqlHandler = (sql, q) => {
+        console.log('q sqlhandle', q)
+        if (q === false) return new Promise((resolve, reject) => {
+            console.log('gotta be false')
+            resolve(false)
+            return;
+        })
         if (q) sql = mysql.format(sql, q)
         console.log('q in sqlhandler', q)
         return new Promise((resolve, reject) => {
@@ -40,6 +46,9 @@ class Dao {
     }
 
     register = q => {
+        if (!q) return new Promise((resolve, reject) => {
+            resolve(false)
+        })
         let info = [
             q.name,
             q.email,

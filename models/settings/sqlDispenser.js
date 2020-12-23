@@ -56,7 +56,7 @@ let sql_createTable_user =
         conversionid int not null,
         primary key(id),
         foreign key(conversionid)
-        references conversion(id) 
+        references ${dbSetting.table_conversion}(id) 
         on update cascade 
         on delete cascade
     );`
@@ -70,7 +70,7 @@ let sql_createTable_semester =
         season int not null,
         primary key(id),
         foreign key(userid)
-        references user(id)
+        references ${dbSetting.table_user}(id)
         on update cascade
         on delete cascade
     );`
@@ -86,7 +86,7 @@ let sql_createTable_course =
         include tinyint(1),
         primary key(id),
         foreign key(semesterid)
-        references semester(id)
+        references ${dbSetting.table_semester}(id)
         on update cascade
         on delete cascade
     );`
@@ -102,17 +102,17 @@ let sql_createTable_assessment =
         weight decimal(5,2),
         primary key(id),
         foreign key(courseid)
-        references course(id)
+        references ${dbSetting.table_course}(id)
         on update cascade
         on delete cascade
     );`
 
 let sql_insert_conversion_1 =
-    `insert into ${dbSetting.conversion}(A1,A2,A3,B1,B2,B3,C1,C2,C3,D1,D2,D3,F) 
+    `insert into ${dbSetting.table_conversion}(A1,A2,A3,B1,B2,B3,C1,C2,C3,D1,D2,D3,F) 
     values(4.3,4.0,3.7,3.3,3.0,2.7,2.3,2.0,1.7,1.3,1.0,0.7,0);`
 
 let sql_insert_conversion_2 =
-    `insert into ${dbSetting.conversion}(A1,A2,A3,B1,B2,B3,C1,C2,C3,D1,D2,D3,F) 
+    `insert into ${dbSetting.table_conversion}(A1,A2,A3,B1,B2,B3,C1,C2,C3,D1,D2,D3,F) 
     values(4.0,4.0,3.7,3.3,3.0,2.7,2.3,2.0,1.7,1.3,1.0,0.7,0);`
 
 let sqls2 = sql_createTable_conversion +

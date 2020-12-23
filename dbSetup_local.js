@@ -23,18 +23,18 @@ function db_initSetting() {
         conn_init1.connect();
         conn_init1.query(sqls.initialSetup, (err) => {
             conn_init1.destroy();
-            if (err) throw err;
+            if (err) reject(err);
             const conn_init2 = mysql.createConnection(settingObj)
             conn_init2.connect()
             conn_init2.query(sqls.newDB, (err) => {
                 conn_init2.destroy();
-                if (err) throw err;
+                if (err) reject(err);
                 settingObj.database = dbSetting.database
                 const conn_init3 = mysql.createConnection(settingObj)
                 conn_init3.connect()
                 conn_init3.query(sqls.createDummy, (err) => {
                     conn_init3.destroy()
-                    if (err) throw err
+                    if (err) reject(err)
                     resolve();
                 })
             })
@@ -43,7 +43,8 @@ function db_initSetting() {
 }
 
 async function dbSetup() {
-    await db_initSetting()
-    console.log('DB setup complete!')
+    await db_initSetting().then(
+        console.log('DB setup complete!')
+    ).catch(err => console.log(err))
 }
 dbSetup()
