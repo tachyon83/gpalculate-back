@@ -15,14 +15,11 @@ class Dao {
     // because in class, written in 'strict mode'
 
     sqlHandler = (sql, q) => {
-        console.log('q sqlhandle', q)
         if (q === false) return new Promise((resolve, reject) => {
-            console.log('gotta be false')
             resolve(false)
             return;
         })
         if (q) sql = mysql.format(sql, q)
-        console.log('q in sqlhandler', q)
         return new Promise((resolve, reject) => {
             this.dbpool.getConnection((err, conn) => {
                 if (err) {
@@ -38,7 +35,7 @@ class Dao {
                         reject(err)
                         return;
                     }
-                    console.log('db process result', rows)
+                    // console.log('db process result', rows)
                     resolve(rows)
                 })
             })
@@ -63,6 +60,15 @@ class Dao {
     existByEmail = email => {
         return this.sqlHandler(sqls.sql_existByEmail, email)
     }
+
+    getNumberFromConversion = converionId => {
+        return this.sqlHandler(sqls.sql_getNumberFromConversion, converionId)
+    }
+
+    getLetterFromConversion = () => {
+        return this.sqlHandler(sqls.sql_getLetterFromConversion)
+    }
+
 
     create = (q, fn) => {
         let info = [

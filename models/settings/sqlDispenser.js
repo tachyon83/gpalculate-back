@@ -115,6 +115,58 @@ let sql_insert_conversion_2 =
     `insert into ${dbSetting.table_conversion}(A1,A2,A3,B1,B2,B3,C1,C2,C3,D1,D2,D3,F) 
     values(4.0,4.0,3.7,3.3,3.0,2.7,2.3,2.0,1.7,1.3,1.0,0.7,0);`
 
+let sql_insert_converson2_A1 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('A1','A+');`
+
+let sql_insert_converson2_A2 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('A2','A');`
+
+let sql_insert_converson2_A3 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('A3','A-');`
+
+let sql_insert_converson2_B1 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('B1','B+');`
+
+let sql_insert_converson2_B2 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('B2','B');`
+
+let sql_insert_converson2_B3 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('B3','B-');`
+
+let sql_insert_converson2_C1 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('C1','C+');`
+
+let sql_insert_converson2_C2 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('C2','C');`
+
+let sql_insert_converson2_C3 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('C3','C-');`
+
+let sql_insert_converson2_D1 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('D1','D+');`
+
+let sql_insert_converson2_D2 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('D2','D');`
+
+let sql_insert_converson2_D3 =
+    `insert into ${dbSetting.table_conversion2} 
+    values('D3','D-');`
+
+let sql_insert_converson2_F =
+    `insert into ${dbSetting.table_conversion2} 
+    values('F','F');`
+
 let sqls2 = sql_createTable_conversion +
     sql_createTable_conversion2 +
     sql_createTable_user +
@@ -122,7 +174,20 @@ let sqls2 = sql_createTable_conversion +
     sql_createTable_course +
     sql_createTable_assessment +
     sql_insert_conversion_1 +
-    sql_insert_conversion_2
+    sql_insert_conversion_2 +
+    sql_insert_converson2_A1 +
+    sql_insert_converson2_A2 +
+    sql_insert_converson2_A3 +
+    sql_insert_converson2_B1 +
+    sql_insert_converson2_B2 +
+    sql_insert_converson2_B3 +
+    sql_insert_converson2_C1 +
+    sql_insert_converson2_C2 +
+    sql_insert_converson2_C3 +
+    sql_insert_converson2_D1 +
+    sql_insert_converson2_D2 +
+    sql_insert_converson2_D3 +
+    sql_insert_converson2_F
 
 let sql_register =
     `insert into ${dbSetting.table_user}(name,email,password,conversionid) 
@@ -134,15 +199,11 @@ let sql_findByEmail =
 let sql_existByEmail =
     `select count(*) as cnt from ${dbSetting.table_user} where email=?;`
 
-let sql_create =
-    `insert into ${dbSetting.tablename}(poolName,poolAddress,
-    poolPhone,poolTypeMask,poolOpentime,poolOption) 
-    select * from (select ? as poolName,? as poolAddress,
-    ? as poolPhone,? as poolTypeMask,? as poolOpentime,? 
-    as poolOption) as tmp where not exists(select poolName 
-    from ${dbSetting.tablename} where poolName = ?) limit 1;`
-let sql_detail =
-    `select * from pooltable where poolId=?;`
+let sql_getNumberFromConversion =
+    `select * from ${dbSetting.table_conversion} where id=?;`
+
+let sql_getLetterFromConversion =
+    `select * from ${dbSetting.table_conversion2};`
 
 let sql_select_totalCount =
     `select count(*) as cnt from ${dbSetting.tablename} 
@@ -164,29 +225,14 @@ let sql_update =
     poolAddress=?,poolPhone=?,poolTypeMask=?,poolOpentime=?,
     poolOption=? where poolId = ?;`
 
-let sql_adminBoard =
-    `select count(*) from ${dbSetting.tablename} union all
-    select count(*) from ${dbSetting.tablename} where 16&poolTypeMask=16 union all
-    select count(*) from ${dbSetting.tablename} where 8&poolTypeMask=8 union all
-    select count(*) from ${dbSetting.tablename} where 4&poolTypeMask=4 union all
-    select count(*) from ${dbSetting.tablename} where 2&poolTypeMask=2 union all
-    select count(*) from ${dbSetting.tablename} where 1&poolTypeMask=1 union all
-    select count(*) from ${dbSetting.tablename} where 4&poolOption=4 union all
-    select count(*) from ${dbSetting.tablename} where 2&poolOption=2 union all
-    select count(*) from ${dbSetting.tablename} where 1&poolOption=1;`
 
 module.exports = {
     initialSetup: sqls1,
     newDB: sql_createDB,
     createDummy: sqls2,
-    // sql_create: sql_create,
-    // sql_detail: sql_detail,
-    // sql_select_totalCount: sql_select_totalCount,
-    // sql_select: sql_select,
-    // sql_adminBoard: sql_adminBoard,
-    // sql_delete: sql_delete,
-    // sql_update: sql_update,
     sql_findByEmail,
     sql_existByEmail,
     sql_register,
+    sql_getNumberFromConversion,
+    sql_getLetterFromConversion,
 }
