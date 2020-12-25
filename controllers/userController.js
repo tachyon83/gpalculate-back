@@ -4,11 +4,21 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10
 
 module.exports = {
+    detail: (req, res) => {
+        const resCode = req.app.get('resCode')
+
+        res.json({
+            result: true,
+            code: resCode.success,
+            data: req.userInfo,
+        })
+    },
+
     register: (req, res) => {
         const resCode = req.app.get('resCode')
 
         const encode = result => {
-            console.log('result in encode', result[0].cnt)
+            // console.log('result in encode', result[0].cnt)
             result = result[0].cnt
             return new Promise((resolve, reject) => {
                 if (result > 0) {
@@ -101,7 +111,7 @@ module.exports = {
                                         letter: e.v,
                                         number: number[e.k]
                                     })
-                                    conversion[e.k] = number[e.k]
+                                    conversion[e.v] = number[e.k]
                                 }
                                 result.conversionArr = conversionArr
                                 result.conversion = conversion
@@ -176,30 +186,23 @@ module.exports = {
     },
 
     modify: (req, res) => {
-        // decode id from jwt
+        // decode id from jwt <- done in authMiddleware and saved in req.userInfo
         // update
         // re issue and sign jwt
-        const { email, password } = req.body
+
         const resCode = req.app.get('resCode')
         const jwtSettings = req.app.get('jwtSettings')
+        req.body.id = req.userInfo.id
 
-        const pwCheck = result => {
-            result = result[0]
-            console.log(password)
-            // console.log(result.password)
+        const refind = result => {
             return new Promise((resolve, reject) => {
-                if (!result) {
-                    resolve(false)
-                    return
-                }
-                bcrypt.compare(password, result.password, (err, res) => {
-                    if (err) {
-                        console.log('err in bcrypt', err)
-                        reject(err)
-                    }
-                    else if (res) resolve(result)
-                    else resolve(false)
-                })
+                if (!result) return resolve(false)
+                dao.findByEmail(req.body.email)
+                    .then(user => {
+                        user = user[0]
+                        if (!user) return resolve(false)
+                        return resolve(user)
+                    }).catch(err => { return reject(err) })
             })
         }
 
@@ -233,7 +236,7 @@ module.exports = {
             if (!token) {
                 res.json({
                     result: false,
-                    code: resCode.wrongEmailOrPassword,
+                    code: resCode.error,
                     data: null,
                 })
             } else {
@@ -242,12 +245,13 @@ module.exports = {
                     code: resCode.success,
                     data: {
                         token,
-                    }
+                    },
                 })
             }
         }
 
         const errorHandler = err => {
+            console.log('err in errHandler', err)
             res.json({
                 result: false,
                 code: resCode.error,
@@ -255,8 +259,8 @@ module.exports = {
             })
         }
 
-        dao.findByEmail(email)
-            .then(pwCheck)
+        dao.modifyById(req.body)
+            .then(refind)
             .then(sign)
             .then(responseHandler)
             .catch(errorHandler)

@@ -2,7 +2,8 @@ const http = require('http');
 const express = require('express');
 const morgan = require('morgan')
 const cors = require('cors');
-const authMiddleware = require('./configs/authMiddleware')
+const webSettings = require('./configs/webSettings')
+const authMiddleware = require('./utils/authMiddleware')
 const app = express();
 
 app.use(express.json())
@@ -10,15 +11,19 @@ app.set('resCode', require('./configs/responseCode'))
 app.set('jwtSettings', require('./configs/jwtSettings'))
 app.set('port', process.env.PORT || 3000);
 
-// app.use(cors(webSettings.corsSettings))
+app.use(cors(webSettings.corsSettings))
 // app.options('/login', cors(webSettings.corsSettings))
 
 app.use((req, res, next) => {
+    // console.log(req.headers)
     console.log('Server Call Time: ', Date.now())
     next()
 })
 
 app.use('/user', require('./routes/user'))
+app.use('/semester', authMiddleware, require('./routes/semester'))
+app.use('/course', authMiddleware, require('./routes/course'))
+app.use('/assessment', authMiddleware, require('./routes/assessment'))
 app.use('/admin', authMiddleware, (req, res) => {
     res.json({ response: 'wow authenticated' })
 })

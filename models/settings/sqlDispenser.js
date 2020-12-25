@@ -205,6 +205,43 @@ let sql_getNumberFromConversion =
 let sql_getLetterFromConversion =
     `select * from ${dbSetting.table_conversion2};`
 
+let sql_modifyById =
+    `update ${dbSetting.table_user} set name=?,
+    email=?,conversionid=? where id = ?;`
+
+let sql_addSemester =
+    `insert into ${dbSetting.table_semester}(userId,year,season) 
+    select ?,?,? where not exists (select * from ${dbSetting.table_semester} 
+    where userid=? and year=? and season=?);`
+
+let sql_deleteSemester =
+    `delete from ${dbSetting.table_semester} where id = ?;`
+
+let sql_addCourse =
+    `insert into ${dbSetting.table_course}(semesterid,name,units,grade,include) 
+    select ?,?,?,?,? where not exists (select * from ${dbSetting.table_course} 
+    where semesterid=? and name=? and units=? and grade=? and include=?);`
+
+let sql_modifyCourse =
+    `update ${dbSetting.table_semester} set semesterid=?, 
+    name=?, units=?, grade=?, include=? where id=?;`
+
+let sql_deleteCourse =
+    `delete from ${dbSetting.table_course} where id=?;`
+
+let sql_addAssessment =
+    `insert into ${dbSetting.table_assessment}(courseid,name,receivedscore,totalscore,weight) 
+    select ?,?,?,?,? where not exists (select * from ${dbSetting.table_assessment} 
+    where courseid=? and name=? and receivedscore=? and totalscore=? and weight=?);`
+
+let sql_modifyAssessment =
+    `update ${dbSetting.table_assessment} set courseid=?, 
+    name=?, receivedscore=?, totalscore=?, weight=? where id=?;`
+
+let sql_deleteAssessment =
+    `delete from ${dbSetting.table_assessment} where id=?;`
+
+
 let sql_select_totalCount =
     `select count(*) as cnt from ${dbSetting.tablename} 
     where (poolName like ? or poolAddress like ?) 
@@ -217,14 +254,6 @@ let sql_select =
     (poolOpentime&?)=? and (poolOption&?)=? 
     order by poolId limit ?,?;`
 
-let sql_delete =
-    `delete from ${dbSetting.tablename} where poolId = ?;`
-
-let sql_update =
-    `update ${dbSetting.tablename} set poolName=?,
-    poolAddress=?,poolPhone=?,poolTypeMask=?,poolOpentime=?,
-    poolOption=? where poolId = ?;`
-
 
 module.exports = {
     initialSetup: sqls1,
@@ -235,4 +264,13 @@ module.exports = {
     sql_register,
     sql_getNumberFromConversion,
     sql_getLetterFromConversion,
+    sql_modifyById,
+    sql_addSemester,
+    sql_deleteSemester,
+    sql_addCourse,
+    sql_modifyCourse,
+    sql_deleteCourse,
+    sql_addAssessment,
+    sql_modifyAssessment,
+    sql_deleteAssessment,
 }

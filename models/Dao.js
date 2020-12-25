@@ -64,132 +64,85 @@ class Dao {
     getNumberFromConversion = converionId => {
         return this.sqlHandler(sqls.sql_getNumberFromConversion, converionId)
     }
-
     getLetterFromConversion = () => {
         return this.sqlHandler(sqls.sql_getLetterFromConversion)
     }
 
-
-    create = (q, fn) => {
+    modifyById = q => {
         let info = [
-            // this.usedIds.length ? this.usedIds.shift() : 'null',
-            q.poolName,
-            q.poolAddress,
-            q.poolPhone,
-            q.poolTypeMask,
-            q.poolOpentime,
-            q.poolOption,
-            q.poolName,
+            q.name,
+            q.email,
+            q.conversionId,
+            q.id,
         ]
-        this.sqlHandler(sqls.sql_create, info, fn).then(res => {
-            fn(null, { response: true })
-        }).catch(err => {
-            fn(err, null)
-        })
+        return this.sqlHandler(sqls.sql_modifyById, info)
     }
 
-    update = (q, fn) => {
+    addSemester = q => {
         let info = [
-            q.poolName,
-            q.poolAddress,
-            q.poolPhone,
-            q.poolTypeMask,
-            q.poolOpentime,
-            q.poolOption,
-            q.poolId,
+            q.userId,
+            q.year,
+            q.season,
         ]
-        this.sqlHandler(sqls.sql_update, info, fn).then(res => {
-            fn(null, { response: true })
-        }).catch(err => {
-            fn(err, null)
-        })
+        info = concat(info)
+        return this.sqlHandler(sqls.sql_addSemester, info)
+    }
+    deleteSemester = id => {
+        return this.sqlHandler(sqls.sql_deleteSemester, id)
     }
 
-    delete = (id, fn) => {
-        this.sqlHandler(sqls.sql_delete, id, fn).then(res => {
-            fn(null, { response: true })
-        }).catch(err => {
-            fn(err, null)
-        })
-    }
-
-    showAdminBoard = fn => {
-        let boardItemNames = [
-            'poolCount',
-            'publicCount',
-            'privateCount',
-            'hotelCount',
-            'indoorCount',
-            'outdoorCount',
-            'childCount',
-            'womanCount',
-            'disabledCount',
+    addCourse = q => {
+        let info = [
+            q.semesterId,
+            q.name,
+            q.units,
+            q.grade,
+            q.include,
         ]
-        this.sqlHandler(sqls.sql_adminBoard, null, fn).then(rows => {
-            let ret = {}
-            for (let i in rows) ret[boardItemNames[i]] = Object.values(rows[i])[0]
-            fn(null, ret)
-        }).catch(err => {
-            fn(err, null)
-        })
+        info = info.concat(info)
+        return this.sqlHandler(sqls.sql_addCourse, info)
     }
-
-    findDetailById = (id, fn) => {
-        this.sqlHandler(sqls.sql_detail, id, fn).then(res => {
-            fn(null, res[0])
-        }).catch(err => {
-            fn(err, null)
-        })
-    }
-
-    findList = (q, fn) => {
-        let pageNumber = q.pageNumber;
-        let searchWord = '%' + q.searchWord + '%';
-
-        // poolTypeMask와 row의 AND연산 후에 row면 true
-        let poolTypeArray = [
-            q.poolOutdoor,
-            q.poolIndoor,
-            q.poolHotel,
-            q.poolPrivate,
-            q.poolPublic,
-        ];
-        let poolTypeMask = 0;
-        for (let i in poolTypeArray) if (poolTypeArray[i] == paginationSettings.checked) poolTypeMask |= (1 << i);
-
-        // opentime은 AND연산 후에 search opentime과 같으면 true
-        let poolOpentime = q.poolOpentime;
-
-        // child,woman,disabled는 AND연산으로 확인
-        let poolOptionArray = [
-            q.poolForDisabled,
-            q.poolForWoman,
-            q.poolForChild,
+    modifyCourse = q => {
+        let info = [
+            q.semesterId,
+            q.name,
+            q.units,
+            q.grade,
+            q.include,
+            q.id,
         ]
-        let poolOption = 0
-        for (let i in poolOptionArray) if (poolOptionArray[i] == paginationSettings.checked) poolOption |= (1 << i);
-
-        let totalCountParams = [searchWord, searchWord, poolTypeMask, poolOpentime, poolOpentime, poolOption, poolOption]
-        let selectParams = [searchWord, searchWord, poolTypeMask, poolOpentime, poolOpentime, poolOption, poolOption, (pageNumber - 1) * paginationSettings.itemsPerPage, paginationSettings.itemsPerPage]
-
-        this.sqlHandler(sqls.sql_select_totalCount, totalCountParams, fn).then(cntRes => {
-            this.sqlHandler(sqls.sql_select, selectParams, fn).then(rows => {
-                let pools = []
-                for (let row of rows) {
-                    pools.push(row)
-                }
-                let result = {
-                    'totalCount': cntRes[0].cnt,
-                    'pools': pools,
-                }
-                fn(null, result)
-            }).catch(err => {
-                fn(err, null)
-            })
-        }).catch(err => {
-            fn(err, null)
-        })
+        return this.sqlHandler(sqls.sql_modifyCourse, info)
     }
+    deleteCourse = id => {
+        return this.sqlHandler(sqls.sql_deleteCourse, id)
+    }
+
+    addAssessment = q => {
+        let info = [
+            q.courseId,
+            q.name,
+            q.receivedScore,
+            q.totalScore,
+            q.weight,
+        ]
+        info = info.concat(info)
+        return this.sqlHandler(sqls.sql_addAssessment, info)
+    }
+    modifyAssessment = q => {
+        let info = [
+            q.courseId,
+            q.name,
+            q.receivedScore,
+            q.totalScore,
+            q.weight,
+            q.id,
+        ]
+        return this.sqlHandler(sqls.sql_modifyAssessment, info)
+    }
+    deleteAssessment = id => {
+        return this.sqlHandler(sqls.sql_deleteAssessment, id)
+    }
+
 }
 
 module.exports = new Dao()

@@ -19,7 +19,8 @@ module.exports = (req, res, next) => {
             })
         }
         req.userInfo = decoded
-        console.log('decode', decoded)
+        console.log('authenticated in authMiddlware!')
+        // console.log('decode', decoded)
         next()
     })
 }
