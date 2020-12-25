@@ -25,19 +25,11 @@ module.exports = {
         }
 
         const responseHandler = result => {
-            if (!result) {
-                res.json({
-                    result: false,
-                    code: resCode.error,
-                    data: null,
-                })
-            } else {
-                res.json({
-                    result: true,
-                    code: resCode.success,
-                    data: result,
-                })
-            }
+            res.json({
+                result: result ? true : false,
+                code: result ? resCode.success : resCode.error,
+                data: result ? result : null,
+            })
         }
         const errorHandler = err => {
             console.log(err)
