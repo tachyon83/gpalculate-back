@@ -5,29 +5,23 @@ module.exports = {
         const resCode = req.app.get('resCode')
 
         const getConversion = rows => {
-            return new Promise(async (resolve, reject) => {
-                if (!rows) return resolve(false)
-                let result = []
-                for (const row of rows) {
-                    let temp = {
-                        conversionId: row.id,
-                    }
+            if (!rows) return Promise.resolve(false)
 
-                    // conversionid (not conversionId),
-                    // because it is coming directly from DB
-                    const [number] = await dao.getNumberFromConversion(row.id)
-                    delete number.id
-
-                    const letter = await dao.getLetterFromConversion()
-
-                    temp.conversion = [...letter].map(e => ({
-                        letter: e.v,
-                        number: number[e.k],
-                    }))
-                    result.push(temp)
+            const eachRowHandler = row => new Promise(async (resolve, reject) => {
+                let temp = {
+                    conversionId: row.id,
                 }
-                resolve(result)
+                const [number] = await dao.getNumberFromConversion(row.id).catch(err => reject(err))
+                delete number.id
+
+                const letter = await dao.getLetterFromConversion().catch(err => reject(err))
+                temp.conversion = [...letter].map(e => ({
+                    letter: e.v,
+                    number: number[e.k],
+                }))
+                resolve(temp)
             })
+            return Promise.all(rows.map(eachRowHandler))
         }
 
         const responseHandler = result => {
@@ -57,6 +51,5 @@ module.exports = {
             .then(getConversion)
             .then(responseHandler)
             .catch(errorHandler)
-
     },
 }
