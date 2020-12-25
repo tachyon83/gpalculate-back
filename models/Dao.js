@@ -15,12 +15,9 @@ class Dao {
     // because in class, written in 'strict mode'
 
     sqlHandler = (sql, q) => {
-        if (q === false) return new Promise((resolve, reject) => {
-            resolve(false)
-            return;
-        })
-        if (q) sql = mysql.format(sql, q)
         return new Promise((resolve, reject) => {
+            if (q === false) return resolve(false)
+            if (q) sql = mysql.format(sql, q)
             this.dbpool.getConnection((err, conn) => {
                 if (err) {
                     console.log('err in getconn', err)
@@ -148,6 +145,9 @@ class Dao {
     }
     assessmentsByCourse = id => {
         return this.sqlHandler(sqls.sql_assessmentsByCourse, id)
+    }
+    getConversion = () => {
+        return this.sqlHandler(sqls.sql_getConversion)
     }
 
 }

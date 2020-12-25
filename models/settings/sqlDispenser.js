@@ -250,6 +250,11 @@ let sql_assessmentsByCourse =
     `select id,name,receivedScore,totalScore,weight 
     from assessment where courseid=?`
 
+let sql_getConversion =
+    `select id from conversion order by id asc;`
+
+
+
 module.exports = {
     initialSetup: sqls1,
     newDB: sql_createDB,
@@ -270,5 +275,6 @@ module.exports = {
     sql_deleteAssessment,
     sql_detailCourse,
     sql_assessmentsByCourse,
+    sql_getConversion,
 
 }
