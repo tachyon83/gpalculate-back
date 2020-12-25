@@ -241,19 +241,14 @@ let sql_modifyAssessment =
 let sql_deleteAssessment =
     `delete from ${dbSetting.table_assessment} where id=?;`
 
+let sql_detailCourse =
+    `select s.year,s.season,c.name,c.units,c.grade 
+    from course c left join semester s on c.semesterid=s.id 
+    where c.id=?;`
 
-let sql_select_totalCount =
-    `select count(*) as cnt from ${dbSetting.tablename} 
-    where (poolName like ? or poolAddress like ?) 
-    and (poolTypeMask&?)=poolTypeMask and 
-    (poolOpentime&?)=? and (poolOption&?)=?;`
-let sql_select =
-    `select * from ${dbSetting.tablename} 
-    where (poolName like ? or poolAddress like ?) 
-    and (poolTypeMask&?)=poolTypeMask and 
-    (poolOpentime&?)=? and (poolOption&?)=? 
-    order by poolId limit ?,?;`
-
+let sql_assessmentsByCourse =
+    `select id,name,receivedScore,totalScore,weight 
+    from assessment where courseid=?`
 
 module.exports = {
     initialSetup: sqls1,
@@ -273,4 +268,7 @@ module.exports = {
     sql_addAssessment,
     sql_modifyAssessment,
     sql_deleteAssessment,
+    sql_detailCourse,
+    sql_assessmentsByCourse,
+
 }

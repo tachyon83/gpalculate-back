@@ -143,6 +143,13 @@ class Dao {
         return this.sqlHandler(sqls.sql_deleteAssessment, id)
     }
 
+    detailCourse = id => {
+        return this.sqlHandler(sqls.sql_detailCourse, id)
+    }
+    assessmentsByCourse = id => {
+        return this.sqlHandler(sqls.sql_assessmentsByCourse, id)
+    }
+
 }
 
 module.exports = new Dao()
