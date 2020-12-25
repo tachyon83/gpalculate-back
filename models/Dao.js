@@ -140,6 +140,10 @@ class Dao {
         return this.sqlHandler(sqls.sql_deleteAssessment, id)
     }
 
+    checkUserIdFromCourse = id => {
+        return this.sqlHandler(sqls.sql_checkUserIdFromCourse, id)
+    }
+
     detailCourse = id => {
         return this.sqlHandler(sqls.sql_detailCourse, id)
     }

@@ -3,11 +3,16 @@ const dao = require('../models/Dao')
 module.exports = {
     detailCourse: (req, res) => {
         const resCode = req.app.get('resCode')
+
+        const userCheck = result => {
+            result = result[0]
+            return Promise.resolve((req.userInfo.id === result.userid) ? req.params.id : false)
+        }
         const responseHandler = result => {
             if (!result) {
                 res.json({
                     result: false,
-                    code: resCode.error,
+                    code: resCode.notAuthenticated,
                     data: null,
                 })
             } else {
@@ -33,8 +38,12 @@ module.exports = {
                 data: null,
             })
         }
-        dao.detailCourse(req.params.id)
+
+        dao.checkUserIdFromCourse(req.params.id)
+            .then(userCheck)
+            .then(dao.detailCourse)
             .then(result => {
+                if (!result) return Promise.resolve(false)
                 result = result[0]
                 return new Promise((resolve, reject) => {
                     dao.assessmentsByCourse(req.params.id)

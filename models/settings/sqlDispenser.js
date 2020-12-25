@@ -241,17 +241,21 @@ let sql_modifyAssessment =
 let sql_deleteAssessment =
     `delete from ${dbSetting.table_assessment} where id=?;`
 
+let sql_checkUserIdFromCourse =
+    `select userid from ${dbSetting.table_semester} where id=
+    (select semesterid from ${dbSetting.table_course} where id=?);`
+
 let sql_detailCourse =
     `select s.year,s.season,c.name,c.units,c.grade 
-    from course c left join semester s on c.semesterid=s.id 
+    from ${dbSetting.table_course} c left join ${dbSetting.table_semester} s on c.semesterid=s.id 
     where c.id=?;`
 
 let sql_assessmentsByCourse =
     `select id,name,receivedScore,totalScore,weight 
-    from assessment where courseid=?`
+    from ${dbSetting.table_assessment} where courseid=?`
 
 let sql_getConversion =
-    `select id from conversion order by id asc;`
+    `select id from ${dbSetting.table_conversion} order by id asc;`
 
 
 
@@ -276,5 +280,6 @@ module.exports = {
     sql_detailCourse,
     sql_assessmentsByCourse,
     sql_getConversion,
+    sql_checkUserIdFromCourse,
 
 }
