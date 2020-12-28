@@ -262,6 +262,18 @@ let sql_assessmentsByCourse =
 let sql_getConversion =
     `select id from ${dbSetting.table_conversion} order by id asc;`
 
+let sql_getCourses =
+    `select name,units,grade,include,id 
+    from ${dbSetting.table_course} 
+    where semesterid=?;`
+
+let sql_findAllSemesters =
+    `select id,year,season 
+    from ${dbSetting.table_semester} 
+    where userId=? 
+    order by 
+    year asc,
+    season asc;`
 
 
 module.exports = {
@@ -287,5 +299,7 @@ module.exports = {
     sql_getConversion,
     sql_checkUserIdFromCourse,
     sql_help,
+    sql_getCourses,
+    sql_findAllSemesters,
 
 }

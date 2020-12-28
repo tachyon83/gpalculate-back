@@ -159,6 +159,13 @@ class Dao {
         return this.sqlHandler(sqls.sql_getConversion)
     }
 
+    findAllSemesters = id => {
+        return this.sqlHandler(sqls.sql_findAllSemesters, id)
+    }
+    getCourses = id => {
+        return this.sqlHandler(sqls.sql_getCourses, id)
+    }
+
 }
 
 module.exports = new Dao()
