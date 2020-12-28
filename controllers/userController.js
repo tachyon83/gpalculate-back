@@ -4,6 +4,38 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10
 
 module.exports = {
+    help: (req, res) => {
+        const resCode = req.app.get('resCode')
+
+        const responseHandler = result => {
+            if (!result.affectedRows) {
+                res.json({
+                    result: false,
+                    code: resCode.error,
+                    data: null,
+                })
+            } else {
+                res.json({
+                    result: true,
+                    code: resCode.success,
+                    data: null,
+                })
+            }
+        }
+
+        const errorHandler = err => {
+            res.json({
+                result: false,
+                code: resCode.error,
+                data: null,
+            })
+        }
+
+        dao.help(req.userInfo.id)
+            .then(responseHandler)
+            .catch(errorHandler)
+    },
+
     detail: (req, res) => {
         const resCode = req.app.get('resCode')
 
@@ -195,8 +227,8 @@ module.exports = {
         req.body.id = req.userInfo.id
 
         const refind = result => {
+            if (!result) return Promise.resolve(false)
             return new Promise((resolve, reject) => {
-                if (!result) return resolve(false)
                 dao.findByEmail(req.body.email)
                     .then(user => {
                         user = user[0]
@@ -207,11 +239,8 @@ module.exports = {
         }
 
         const sign = result => {
+            if (!result) return Promise.resolve(false)
             return new Promise((resolve, reject) => {
-                if (!result) {
-                    resolve(false)
-                    return
-                }
                 jwt.sign({
                     id: result.id,
                     name: result.name,
@@ -224,8 +253,7 @@ module.exports = {
                 }, (err, token) => {
                     if (err) {
                         console.log('err while signing', err)
-                        reject(err)
-                        return
+                        return reject(err)
                     }
                     resolve(token)
                 })

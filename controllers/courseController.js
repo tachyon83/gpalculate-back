@@ -6,6 +6,7 @@ module.exports = {
 
         const userCheck = result => {
             result = result[0]
+            if (!result) return Promise.resolve(false)
             return Promise.resolve((req.userInfo.id === result.userid) ? req.params.id : false)
         }
         const responseHandler = result => {
@@ -31,6 +32,7 @@ module.exports = {
             }
         }
         const errorHandler = err => {
+            err.reason === ''
             console.log(err)
             res.json({
                 result: false,

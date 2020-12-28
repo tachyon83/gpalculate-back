@@ -54,6 +54,7 @@ let sql_createTable_user =
         email varchar(60) not null,
         password varchar(150) not null,
         conversionid int not null,
+        help tinyint(1) default 1 not null,
         primary key(id),
         foreign key(conversionid)
         references ${dbSetting.table_conversion}(id) 
@@ -209,6 +210,10 @@ let sql_modifyById =
     `update ${dbSetting.table_user} set name=?,
     email=?,conversionid=? where id = ?;`
 
+let sql_help =
+    `update ${dbSetting.table_user} set help=0 
+    where id=?;`
+
 let sql_addSemester =
     `insert into ${dbSetting.table_semester}(userId,year,season) 
     select ?,?,? where not exists (select * from ${dbSetting.table_semester} 
@@ -281,5 +286,6 @@ module.exports = {
     sql_assessmentsByCourse,
     sql_getConversion,
     sql_checkUserIdFromCourse,
+    sql_help,
 
 }

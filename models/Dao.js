@@ -15,8 +15,9 @@ class Dao {
     // because in class, written in 'strict mode'
 
     sqlHandler = (sql, q) => {
+        if (q === false) return Promise.resolve(false)
         return new Promise((resolve, reject) => {
-            if (q === false) return resolve(false)
+            // if (q === false) return resolve(false)
             if (q) sql = mysql.format(sql, q)
             this.dbpool.getConnection((err, conn) => {
                 if (err) {
@@ -73,6 +74,10 @@ class Dao {
             q.id,
         ]
         return this.sqlHandler(sqls.sql_modifyById, info)
+    }
+
+    help = id => {
+        return this.sqlHandler(sqls.sql_help, id)
     }
 
     addSemester = q => {

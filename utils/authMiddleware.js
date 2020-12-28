@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
+const tokenKey = require('../configs/webSettings').tokenKey
 
 module.exports = (req, res, next) => {
-    const token = req.headers['x-access-token']
+    const token = req.headers[tokenKey]
     if (!token) {
         return res.json({
             result: false,

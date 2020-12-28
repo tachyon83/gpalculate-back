@@ -24,7 +24,7 @@ app.use('/user', require('./routes/user'))
 app.use('/semester', authMiddleware, require('./routes/semester'))
 app.use('/course', authMiddleware, require('./routes/course'))
 app.use('/assessment', authMiddleware, require('./routes/assessment'))
-app.use('/conversion', authMiddleware, require('./routes/conversion'))
+app.use('/conversion', require('./routes/conversion'))
 app.use('/admin', authMiddleware, (req, res) => {
     res.json({ response: 'wow authenticated' })
 })
