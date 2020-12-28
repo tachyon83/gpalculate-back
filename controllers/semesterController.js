@@ -1,6 +1,44 @@
 const dao = require('../models/Dao')
 
 module.exports = {
+    saveSemester: (req, res) => {
+        const resCode = req.app.get('resCode')
+
+        const eachCourseHandler = async course => {
+            const eachResult = await dao.updateInclude([course.include, course.id])
+            if (!eachResult.affectedRows) return Promise.reject('some course(s) not matched')
+            return Promise.resolve(true)
+        }
+
+        const eachSemesterHandler = async semester => {
+            return Promise.all(semester.courses.map(eachCourseHandler))
+        }
+
+        const saveHandler = data => {
+            return Promise.all(data.map(eachSemesterHandler))
+        }
+
+        const responseHandler = result => {
+            res.json({
+                result: true,
+                code: resCode.success,
+                data: null,
+            })
+        }
+        const errorHandler = err => {
+            console.log(err)
+            res.json({
+                result: false,
+                code: resCode.error,
+                data: null,
+            })
+        }
+
+        saveHandler(req.body.data)
+            .then(responseHandler)
+            .catch(errorHandler)
+    },
+
     getSemester: (req, res) => {
         const resCode = req.app.get('resCode')
 

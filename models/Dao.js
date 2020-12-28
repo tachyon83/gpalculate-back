@@ -33,7 +33,7 @@ class Dao {
                         reject(err)
                         return;
                     }
-                    // console.log('db process result', rows)
+                    // console.log('db process result: ', rows)
                     resolve(rows)
                 })
             })
@@ -164,6 +164,9 @@ class Dao {
     }
     getCourses = id => {
         return this.sqlHandler(sqls.sql_getCourses, id)
+    }
+    updateInclude = q => {
+        return this.sqlHandler(sqls.sql_updateInclude, q)
     }
 
 }

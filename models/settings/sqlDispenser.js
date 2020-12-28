@@ -275,6 +275,9 @@ let sql_findAllSemesters =
     year asc,
     season asc;`
 
+let sql_updateInclude =
+    `update ${dbSetting.table_course} 
+    set include=? where id=?;`
 
 module.exports = {
     initialSetup: sqls1,
@@ -301,5 +304,6 @@ module.exports = {
     sql_help,
     sql_getCourses,
     sql_findAllSemesters,
+    sql_updateInclude,
 
 }
