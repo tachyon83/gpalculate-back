@@ -51,7 +51,7 @@ let sql_createTable_user =
     ${dbSetting.table_user}(
         id int not null auto_increment,
         name varchar(20) not null,
-        email varchar(60) not null,
+        email varchar(60) not null unique,
         password varchar(150) not null,
         conversionid int not null,
         help tinyint(1) default 1 not null,

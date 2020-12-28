@@ -238,6 +238,34 @@ module.exports = {
             })
         }
 
+        const addConversion = result => {
+            if (!result) return Promise.resolve(false)
+            return new Promise((resolve, reject) => {
+                // conversionid (not conversionId),
+                // because it is coming directly from DB
+                dao.getNumberFromConversion(result.conversionid)
+                    .then(number => {
+                        number = number[0]
+                        delete number.id
+                        dao.getLetterFromConversion()
+                            .then(letter => {
+                                let conversionArr = []
+                                let conversion = {}
+                                for (let e of letter) {
+                                    conversionArr.push({
+                                        letter: e.v,
+                                        number: number[e.k]
+                                    })
+                                    conversion[e.v] = number[e.k]
+                                }
+                                result.conversionArr = conversionArr
+                                result.conversion = conversion
+                                resolve(result)
+                            }).catch(err => reject(err))
+                    }).catch(err => reject(err))
+            })
+        }
+
         const sign = result => {
             if (!result) return Promise.resolve(false)
             return new Promise((resolve, reject) => {
@@ -255,13 +283,14 @@ module.exports = {
                         console.log('err while signing', err)
                         return reject(err)
                     }
-                    resolve(token)
+                    result.token = token
+                    resolve(result)
                 })
             })
         }
 
-        const responseHandler = token => {
-            if (!token) {
+        const responseHandler = result => {
+            if (!result) {
                 res.json({
                     result: false,
                     code: resCode.error,
@@ -272,23 +301,28 @@ module.exports = {
                     result: true,
                     code: resCode.success,
                     data: {
-                        token,
+                        token: result.token,
+                        conversionArr: result.conversionArr,
+                        conversion: result.conversion,
                     },
                 })
             }
         }
 
         const errorHandler = err => {
-            console.log('err in errHandler', err)
+            // console.log('err in errHandler', err)
+            // console.log(Object.keys(err))
+            // console.log(err.errno)
             res.json({
                 result: false,
-                code: resCode.error,
+                code: (err.errno == 1062) ? resCode.existOnRegister : resCode.error,
                 data: null,
             })
         }
 
         dao.modifyById(req.body)
             .then(refind)
+            .then(addConversion)
             .then(sign)
             .then(responseHandler)
             .catch(errorHandler)

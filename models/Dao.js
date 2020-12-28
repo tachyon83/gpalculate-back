@@ -23,15 +23,13 @@ class Dao {
                 if (err) {
                     console.log('err in getconn', err)
                     if (conn) conn.release();
-                    reject(err)
-                    return;
+                    return reject(err)
                 }
                 conn.query(sql, (err, rows, fields) => {
                     conn.release();
                     if (err) {
-                        console.log('err in query', err)
-                        reject(err)
-                        return;
+                        // console.log('err in query', err)
+                        return reject(err)
                     }
                     // console.log('db process result: ', rows)
                     resolve(rows)
@@ -86,7 +84,7 @@ class Dao {
             q.year,
             q.season,
         ]
-        info = concat(info)
+        info = info.concat(info)
         return this.sqlHandler(sqls.sql_addSemester, info)
     }
     deleteSemester = id => {
