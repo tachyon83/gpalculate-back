@@ -251,7 +251,7 @@ let sql_checkUserIdFromCourse =
     (select semesterid from ${dbSetting.table_course} where id=?);`
 
 let sql_detailCourse =
-    `select s.year,s.season,c.name,c.units,c.grade 
+    `select s.id,s.year,s.season,c.name,c.units,c.grade 
     from ${dbSetting.table_course} c left join ${dbSetting.table_semester} s on c.semesterid=s.id 
     where c.id=?;`
 

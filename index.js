@@ -16,7 +16,9 @@ app.use(cors(webSettings.corsSettings))
 
 app.use((req, res, next) => {
     // console.log(req.headers)
-    console.log('Server Call Time: ', Date.now())
+    let currTime = new Date();
+    let timeStamp = currTime.getHours() + ':' + currTime.getMinutes();
+    console.log('Server Call : ', timeStamp)
     next()
 })
 
