@@ -20,14 +20,7 @@ module.exports = {
                 res.json({
                     result: true,
                     code: resCode.success,
-                    data: {
-                        year: result.year,
-                        season: result.season,
-                        name: result.name,
-                        units: result.units,
-                        grade: result.grade,
-                        assessment: result.assessmentsArr,
-                    },
+                    data: result,
                 })
             }
         }
