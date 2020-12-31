@@ -8,7 +8,7 @@ module.exports = {
             if (!result.affectedRows) {
                 res.json({
                     result: false,
-                    code: resCode.existOnAdd,
+                    code: resCode.existOnProcess,
                     data: null,
                 })
             } else {
@@ -23,7 +23,7 @@ module.exports = {
             console.log(err)
             res.json({
                 result: false,
-                code: resCode.error,
+                code: (err.errno === 1062) ? resCode.existOnProcess : resCode.error,
                 data: null,
             })
         }
@@ -51,9 +51,10 @@ module.exports = {
             }
         }
         const errorHandler = err => {
+            console.log(err)
             res.json({
                 result: false,
-                code: resCode.error,
+                code: (err.errno === 1062) ? resCode.existOnProcess : resCode.error,
                 data: null,
             })
         }
@@ -82,6 +83,7 @@ module.exports = {
             }
         }
         const errorHandler = err => {
+            console.log(err)
             res.json({
                 result: false,
                 code: resCode.error,

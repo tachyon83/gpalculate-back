@@ -4,5 +4,7 @@ module.exports = {
     'wrongEmailOrPassword': 2,
     'error': 3,
     'notAuthenticated': 4,
-    'existOnAdd': 5,
+    'existOnProcess': 5,
+    'noInput': 6,
+    'noMatch': 7,
 }

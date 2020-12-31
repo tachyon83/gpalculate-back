@@ -21,16 +21,13 @@ class Dao {
             if (q) sql = mysql.format(sql, q)
             this.dbpool.getConnection((err, conn) => {
                 if (err) {
-                    console.log('err in getconn', err)
+                    // console.log('err in getconn', err)
                     if (conn) conn.release();
                     return reject(err)
                 }
                 conn.query(sql, (err, rows, fields) => {
                     conn.release();
-                    if (err) {
-                        // console.log('err in query', err)
-                        return reject(err)
-                    }
+                    if (err) return reject(err)
                     // console.log('db process result: ', rows)
                     resolve(rows)
                 })

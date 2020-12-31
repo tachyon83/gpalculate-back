@@ -70,6 +70,7 @@ let sql_createTable_semester =
         year int not null,
         season int not null,
         primary key(id),
+        unique key(userid,year,season),
         foreign key(userid)
         references ${dbSetting.table_user}(id)
         on update cascade
@@ -86,6 +87,7 @@ let sql_createTable_course =
         grade varchar(5),
         include tinyint(1),
         primary key(id),
+        unique key(semesterid,name),
         foreign key(semesterid)
         references ${dbSetting.table_semester}(id)
         on update cascade
@@ -102,6 +104,7 @@ let sql_createTable_assessment =
         totalScore decimal(5,2),
         weight decimal(5,2),
         primary key(id),
+        unique key(courseid,name),
         foreign key(courseid)
         references ${dbSetting.table_course}(id)
         on update cascade
@@ -228,7 +231,7 @@ let sql_addCourse =
     where semesterid=? and name=? and units=? and grade=? and include=?);`
 
 let sql_modifyCourse =
-    `update ${dbSetting.table_semester} set semesterid=?, 
+    `update ${dbSetting.table_course} set semesterid=?, 
     name=?, units=?, grade=?, include=? where id=?;`
 
 let sql_deleteCourse =

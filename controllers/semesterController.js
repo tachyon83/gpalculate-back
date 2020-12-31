@@ -5,16 +5,35 @@ module.exports = {
         const resCode = req.app.get('resCode')
 
         const eachCourseHandler = async course => {
+            if (!course) {
+                let err = new Error()
+                err.reason = 'noInput'
+                throw err
+            }
             const eachResult = await dao.updateInclude([course.include, course.id])
-            if (!eachResult.affectedRows) return Promise.reject('some course(s) not matched')
+            if (!eachResult.affectedRows) {
+                let err = new Error()
+                err.reason = 'noMatch'
+                throw err
+            }
             return Promise.resolve(true)
         }
 
         const eachSemesterHandler = async semester => {
+            if (!semester) {
+                let err = new Error()
+                err.reason = 'noInput'
+                throw err
+            }
             return Promise.all(semester.courses.map(eachCourseHandler))
         }
 
         const saveHandler = data => {
+            if (!data) {
+                let err = new Error()
+                err.reason = 'noInput'
+                throw err
+            }
             return Promise.all(data.map(eachSemesterHandler))
         }
 
@@ -29,7 +48,7 @@ module.exports = {
             console.log(err)
             res.json({
                 result: false,
-                code: resCode.error,
+                code: err.reason ? resCode[err.reason] : resCode.error,
                 data: null,
             })
         }
@@ -83,10 +102,11 @@ module.exports = {
         req.body.userId = req.userInfo.id
 
         const responseHandler = result => {
+            console.log(result)
             if (!result.affectedRows) {
                 res.json({
                     result: false,
-                    code: resCode.existOnAdd,
+                    code: resCode.existOnProcess,
                     data: null,
                 })
             } else {
@@ -101,7 +121,7 @@ module.exports = {
             console.log(err)
             res.json({
                 result: false,
-                code: resCode.error,
+                code: (err.errno === 1062) ? resCode.existOnProcess : resCode.error,
                 data: null,
             })
         }
@@ -118,6 +138,12 @@ module.exports = {
                 res.json({
                     result: false,
                     code: resCode.error,
+                    data: null,
+                })
+            } else if (!result.affectedRows) {
+                res.json({
+                    result: false,
+                    code: resCode.noMatch,
                     data: null,
                 })
             } else {
