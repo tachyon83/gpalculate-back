@@ -62,7 +62,7 @@ module.exports = {
         const resCode = req.app.get('resCode')
 
         const semesterCollector = rows => {
-            if (!rows) return Promise.resolve([])
+            if (!rows.length) return Promise.resolve([])
             const eachRowHandler = row => new Promise(async (resolve, reject) => {
                 let temp = {
                     id: row.id,
