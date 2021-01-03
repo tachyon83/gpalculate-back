@@ -27,26 +27,9 @@ app.use('/semester', authMiddleware, require('./routes/semester'))
 app.use('/course', authMiddleware, require('./routes/course'))
 app.use('/assessment', authMiddleware, require('./routes/assessment'))
 app.use('/conversion', require('./routes/conversion'))
-app.use('/admin', authMiddleware, (req, res) => {
-    res.json({ response: 'wow authenticated' })
-})
-// app.use('/logout', (req, res) => {
-//     // req.logout();
-//     // req.session.save(function () {
-//     //     res.redirect('/');
-//     // })
-//     req.session.destroy(err => {
-//         if (err) res.status(500);
-//         res.json({ response: true })
-//     })
-// })
+app.use('/admin', require('./routes/admin'))
 
-// // 404
-// app.use(function (req, res, next) {
-//     // next(createError(404));
-// });
-
-// catch 404 and forward to error handler
+// 404
 app.use(function (req, res, next) {
     let err = new Error('Not Found');
     err.status = 404;
@@ -56,11 +39,18 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // res.locals.message = err.message;
+    // res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+    console.log('reached the end...')
     res.status(err.status || 500);
-    console.log('reached the end...404 or 500')
+
+    const resCode = req.app.get('resCode')
+    res.json({
+        result: false,
+        code: resCode.pageNotFound,
+        data: null,
+    })
     // res.render('error');
 });
 

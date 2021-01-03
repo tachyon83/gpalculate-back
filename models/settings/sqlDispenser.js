@@ -111,6 +111,16 @@ let sql_createTable_assessment =
         on delete cascade
     );`
 
+let sql_createTable_announcement =
+    `create table if not exists 
+    ${dbSetting.table_announcement}(
+        id int not null auto_increment,
+        expiresOn timestamp,
+        message varchar(500) not null,
+        primary key(id),
+        unique key(expiresOn,message)
+    );`
+
 let sql_insert_conversion_1 =
     `insert into ${dbSetting.table_conversion}(A1,A2,A3,B1,B2,B3,C1,C2,C3,D1,D2,D3,F) 
     values(4.3,4.0,3.7,3.3,3.0,2.7,2.3,2.0,1.7,1.3,1.0,0.7,0);`
@@ -177,6 +187,7 @@ let sqls2 = sql_createTable_conversion +
     sql_createTable_semester +
     sql_createTable_course +
     sql_createTable_assessment +
+    sql_createTable_announcement +
     sql_insert_conversion_1 +
     sql_insert_conversion_2 +
     sql_insert_converson2_A1 +
@@ -282,6 +293,15 @@ let sql_updateInclude =
     `update ${dbSetting.table_course} 
     set include=? where id=?;`
 
+let sql_getAnnouncement =
+    `select * from ${dbSetting.table_announcement} 
+    where effectiveBy>=? order by effectiveBy asc;`
+
+let sql_addAnnouncement =
+    `insert into ${dbSetting.table_announcement}(
+        effectiveBy,message
+    ) values(?,?);`
+
 module.exports = {
     initialSetup: sqls1,
     newDB: sql_createDB,
@@ -308,5 +328,7 @@ module.exports = {
     sql_getCourses,
     sql_findAllSemesters,
     sql_updateInclude,
+    sql_getAnnouncement,
+    sql_addAnnouncement,
 
 }

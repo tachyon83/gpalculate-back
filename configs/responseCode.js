@@ -7,4 +7,5 @@ module.exports = {
     'existOnProcess': 5,
     'noInput': 6,
     'noMatch': 7,
+    'pageNotFound': 8,
 }

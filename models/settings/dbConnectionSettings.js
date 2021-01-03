@@ -14,5 +14,6 @@ module.exports = {
     table_semester: 'semester',
     table_course: 'course',
     table_assessment: 'assessment',
+    table_announcement: 'announcement',
     connectionLimit: 100,
 }
