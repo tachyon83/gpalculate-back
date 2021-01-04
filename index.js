@@ -29,6 +29,7 @@ app.use('/course', authMiddleware, require('./routes/course'))
 app.use('/assessment', authMiddleware, require('./routes/assessment'))
 app.use('/conversion', require('./routes/conversion'))
 app.use('/admin', adminAuthMiddleware, require('./routes/admin'))
+app.use('/announcement', require('./routes/announcement'))
 
 // 404
 app.use(function (req, res, next) {
