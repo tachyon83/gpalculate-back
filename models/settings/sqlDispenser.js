@@ -325,6 +325,7 @@ let sql_deleteUser =
     ${dbSetting.table_user} 
     where email=?;`
 
+
 module.exports = {
     initialSetup: sqls1,
     newDB: sql_createDB,

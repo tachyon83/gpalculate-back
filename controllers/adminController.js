@@ -154,4 +154,27 @@ module.exports = {
             .catch(errorHandler)
     },
 
+    getUserDetail: (req, res) => {
+        const resCode = req.app.get('resCode')
+
+        const responseHandler = result => {
+            res.json({
+                result: true,
+                code: resCode.success,
+                data: result[0],
+            })
+        }
+        const errorHandler = err => {
+            console.log(err)
+            res.json({
+                result: false,
+                code: resCode.error,
+                data: null,
+            })
+        }
+        dao.findByEmail(req.params.email)
+            .then(responseHandler)
+            .catch(errorHandler)
+    },
+
 }

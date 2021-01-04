@@ -192,6 +192,7 @@ class Dao {
         return this.sqlHandler(sqls.sql_deleteUser, q)
     }
 
+
 }
 
 module.exports = new Dao()
