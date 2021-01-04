@@ -1,6 +1,5 @@
 const mysql = require('mysql');
 const dbCreate = require('./dbPoolCreator');
-const { sql_getNotice, sql_getAnnouncement } = require('./settings/sqlDispenser');
 const sqls = require('./settings/sqlDispenser')
 
 class Dao {
@@ -166,7 +165,7 @@ class Dao {
     }
 
     getAnnouncement = q => {
-        return this.sqlHandler(sql_getAnnouncement, q)
+        return this.sqlHandler(sqls.sql_getAnnouncement, q)
     }
 
     addAnnouncement = q => {
@@ -174,7 +173,23 @@ class Dao {
             q.expiresOn,
             q.message,
         ]
-        return this.sqlHandler(sql_addAnnouncement, info)
+        return this.sqlHandler(sqls.sql_addAnnouncement, info)
+    }
+
+    addConversion = q => {
+        return this.sqlHandler(sqls.sql_addConversion, q)
+    }
+
+    getUserTotal = () => {
+        return this.sqlHandler(sqls.sql_getUserTotal)
+    }
+
+    getUserList = () => {
+        return this.sqlHandler(sqls.sql_getUserList)
+    }
+
+    deleteUser = q => {
+        return this.sqlHandler(sqls.sql_deleteUser, q)
     }
 
 }

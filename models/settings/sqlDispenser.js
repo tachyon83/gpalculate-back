@@ -2,6 +2,8 @@ const dbSetting = require('./dbConnectionSettings')
 
 // '%' vs 'localhost'
 
+// need to add superuser into 'user' manually
+
 let sql_createUser =
     `create user if not exists ${dbSetting.user}
     identified by '${dbSetting.password}';`;
@@ -36,7 +38,8 @@ let sql_createTable_conversion =
         D2 decimal(5,2),
         D3 decimal(5,2),
         F decimal(5,2),
-        primary key(id)
+        primary key(id),
+        unique key(A1,A2,A3,B1,B2,B3,C1,C2,C3,D1,D2,D3,F)
     );`
 
 let sql_createTable_conversion2 =
@@ -295,12 +298,32 @@ let sql_updateInclude =
 
 let sql_getAnnouncement =
     `select * from ${dbSetting.table_announcement} 
-    where effectiveBy>=? order by effectiveBy asc;`
+    where expiresOn>=? order by expiresOn asc;`
 
 let sql_addAnnouncement =
     `insert into ${dbSetting.table_announcement}(
-        effectiveBy,message
+        expiresOn,message
     ) values(?,?);`
+
+let sql_addConversion =
+    `insert into ${dbSetting.table_conversion}
+    (A1,A2,A3,B1,B2,B3,C1,C2,C3,D1,D2,D3,F) 
+    values(?,?,?,?,?,?,?,?,?,?,?,?,?);`
+
+let sql_getUserTotal =
+    `select count(*) as cnt from 
+    ${dbSetting.table_user} 
+    where admin=0;`
+
+let sql_getUserList =
+    `select * from 
+    ${dbSetting.table_user} 
+    where admin=0;`
+
+let sql_deleteUser =
+    `delete from 
+    ${dbSetting.table_user} 
+    where email=?;`
 
 module.exports = {
     initialSetup: sqls1,
@@ -330,5 +353,9 @@ module.exports = {
     sql_updateInclude,
     sql_getAnnouncement,
     sql_addAnnouncement,
+    sql_addConversion,
+    sql_getUserTotal,
+    sql_getUserList,
+    sql_deleteUser,
 
 }

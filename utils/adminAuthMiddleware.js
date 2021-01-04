@@ -19,8 +19,15 @@ module.exports = (req, res, next) => {
                 data: null,
             })
         }
+        if (!decoded.isAdmin) {
+            return res.json({
+                result: false,
+                code: req.app.get('resCode').notAuthenticated,
+                data: null,
+            })
+        }
         req.userInfo = decoded
-        console.log('authenticated in authMiddlware!')
+        console.log('authenticated in adminAuthMiddlware!')
         // console.log('decoded', decoded)
         next()
     })

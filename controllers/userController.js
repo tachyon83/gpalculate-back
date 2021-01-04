@@ -164,6 +164,7 @@ module.exports = {
                     name: result.name,
                     email: result.email,
                     conversionId: result.conversionid,
+                    isAdmin: result.admin,
                 }, jwtSettings.secret, {
                     expiresIn: jwtSettings.expiresIn,
                     issuer: jwtSettings.issuer,
@@ -192,9 +193,11 @@ module.exports = {
                     result: true,
                     code: resCode.success,
                     data: {
+                        help: result.help,
                         token: result.token,
                         conversionArr: result.conversionArr,
                         conversion: result.conversion,
+                        isAdmin: result.admin,
                     }
                 })
             }

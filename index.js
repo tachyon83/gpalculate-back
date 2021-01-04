@@ -4,6 +4,7 @@ const morgan = require('morgan')
 const cors = require('cors');
 const webSettings = require('./configs/webSettings')
 const authMiddleware = require('./utils/authMiddleware')
+const adminAuthMiddleware = require('./utils/adminAuthMiddleware')
 const app = express();
 
 app.use(express.json())
@@ -27,7 +28,7 @@ app.use('/semester', authMiddleware, require('./routes/semester'))
 app.use('/course', authMiddleware, require('./routes/course'))
 app.use('/assessment', authMiddleware, require('./routes/assessment'))
 app.use('/conversion', require('./routes/conversion'))
-app.use('/admin', require('./routes/admin'))
+app.use('/admin', adminAuthMiddleware, require('./routes/admin'))
 
 // 404
 app.use(function (req, res, next) {
@@ -48,7 +49,7 @@ app.use(function (err, req, res, next) {
     const resCode = req.app.get('resCode')
     res.json({
         result: false,
-        code: resCode.pageNotFound,
+        code: resCode.invalidPath,
         data: null,
     })
     // res.render('error');
