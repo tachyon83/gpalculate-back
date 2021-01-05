@@ -7,6 +7,7 @@ const authMiddleware = require('./utils/authMiddleware')
 const adminAuthMiddleware = require('./utils/adminAuthMiddleware')
 const app = express();
 
+app.use(morgan('short'))
 app.use(express.json())
 app.set('resCode', require('./configs/responseCode'))
 app.set('jwtSettings', require('./configs/jwtSettings'))
@@ -19,7 +20,7 @@ app.use((req, res, next) => {
     // console.log(req.headers)
     let currTime = new Date();
     let timeStamp = currTime.getHours() + ':' + currTime.getMinutes();
-    console.log('Server Call : ', timeStamp)
+    console.log('server called at: ', timeStamp)
     next()
 })
 
