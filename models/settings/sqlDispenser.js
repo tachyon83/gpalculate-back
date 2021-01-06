@@ -58,6 +58,7 @@ let sql_createTable_user =
         password varchar(150) not null,
         conversionid int not null,
         help tinyint(1) default 1 not null,
+        admin tinyint(1) default 0 not null,
         primary key(id),
         foreign key(conversionid)
         references ${dbSetting.table_conversion}(id) 
