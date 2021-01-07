@@ -4,7 +4,7 @@ const controller = require('../controllers/adminController')
 
 router.get('/user', controller.getUserTotal)
 router.get('/user/list', controller.getUserList)
-router.get('/user/:email', controller.getUserDetail)
+router.get('/user/:keyword', controller.findUserByKeyword)
 router.delete('/user', controller.deleteUser)
 router.post('/conversion', controller.addConversion)
 router.post('/announcement', controller.addAnnouncement)

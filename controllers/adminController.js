@@ -120,14 +120,14 @@ module.exports = {
             .catch(errorHandler)
     },
 
-    getUserDetail: (req, res) => {
+    findUserByKeyword: (req, res) => {
         const resCode = req.app.get('resCode')
 
         const responseHandler = result => {
             res.json({
                 result: true,
                 code: resCode.success,
-                data: result[0],
+                data: result,
             })
         }
         const errorHandler = err => {
@@ -138,7 +138,7 @@ module.exports = {
                 data: null,
             })
         }
-        dao.findByEmail(req.params.email)
+        dao.findUserByKeyword(req.params.keyword)
             .then(responseHandler)
             .catch(errorHandler)
     },

@@ -192,6 +192,11 @@ class Dao {
         return this.sqlHandler(sqls.sql_deleteUser, q)
     }
 
+    findUserByKeyword = q => {
+        let info = [q, q]
+        return this.sqlHandler(sqls.sql_findUserByKeyword, info)
+    }
+
 
 }
 

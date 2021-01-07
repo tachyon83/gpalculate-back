@@ -326,6 +326,10 @@ let sql_deleteUser =
     ${dbSetting.table_user} 
     where email=?;`
 
+let sql_findUserByKeyword =
+    `select * from ${dbSetting.table_user} 
+    where name like concat('%',?,'%') or email like concat('%',?,'%');`
+
 
 module.exports = {
     initialSetup: sqls1,
@@ -359,5 +363,6 @@ module.exports = {
     sql_getUserTotal,
     sql_getUserList,
     sql_deleteUser,
+    sql_findUserByKeyword,
 
 }
