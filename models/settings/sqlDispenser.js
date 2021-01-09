@@ -328,7 +328,8 @@ let sql_deleteUser =
 
 let sql_findUserByKeyword =
     `select * from ${dbSetting.table_user} 
-    where name like concat('%',?,'%') or email like concat('%',?,'%');`
+    where name like concat('%',?,'%') or email like concat('%',?,'%')
+    and admin=0;`
 
 
 module.exports = {
