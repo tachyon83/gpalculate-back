@@ -2,12 +2,9 @@
   "name": "gpalculate-back",
   "version": "1.0.0",
   "description": "",
-  "main": "dbSetup_heroku.js",
-  "engines": {
-    "node": "12.18.3"
-  },
+  "main": "index.js",
   "scripts": {
-    "start": "node dbSetup_heroku.js",
+    "start": "npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
