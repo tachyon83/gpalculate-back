@@ -120,7 +120,7 @@ let sql_createTable_announcement =
     ${dbSetting.table_announcement}(
         id int not null auto_increment,
         expiresOn timestamp,
-        message varchar(500) not null,
+        message varchar(240) not null,
         primary key(id),
         unique key(expiresOn,message)
     );`
