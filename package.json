@@ -7,6 +7,7 @@
     "start": "node dbSetup_heroku.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tachyon83/gpalculate-back.git"
@@ -16,7 +17,6 @@
   "bugs": {
     "url": "https://github.com/tachyon83/gpalculate-back/issues"
   },
-  "homepage": "https://github.com/tachyon83/gpalculate-back#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
