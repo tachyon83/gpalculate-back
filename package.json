@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "dbSetup_heroku.js",
+  "engines": {
+    "node": "12.18.3"
+  },
   "scripts": {
     "start": "node dbSetup_heroku.js",
     "test": "echo \"Error: no test specified\" && exit 1"
