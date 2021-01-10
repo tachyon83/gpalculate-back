@@ -31,7 +31,7 @@ function db_initSetting() {
         conn.connect();
         conn.query(sqls.createDummy, err => {
             if (err) {
-                conn_init3.destroy()
+                conn.destroy()
                 return reject(err)
             }
             bcrypt.genSalt(saltRounds)
@@ -40,8 +40,8 @@ function db_initSetting() {
                 })
                 .then(hash => {
                     superuser[2] = hash
-                    conn_init3.query(sql_addSuperuser, superuser, err => {
-                        conn_init3.destroy();
+                    conn.query(sql_addSuperuser, superuser, err => {
+                        conn.destroy();
                         if (err) return reject(err);
                         resolve();
                     })
