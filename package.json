@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "12.18.3",
+    "npm": "6.14.10"
+  },
   "scripts": {
     "start": "npm install",
     "heroku-postbuild": "node dbSetup_heroku.js",
