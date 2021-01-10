@@ -4,13 +4,6 @@ const sqls = require('./models/settings/sqlDispenser')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
-let rootSettingObj = {
-    host: dbSetting.host,
-    port: dbSetting.port,
-    user: dbSetting.yourLocalMySQLUsername,
-    password: dbSetting.yourLocalMySQLPassword,
-    multipleStatements: true,
-}
 let settingObj = {
     host: dbSetting.host,
     port: dbSetting.port,
@@ -49,7 +42,7 @@ function db_initSetting() {
                 conn_init3.query(sqls.createDummy, (err) => {
                     if (err) {
                         conn_init3.destroy()
-                        reject(err)
+                        return reject(err)
                     }
                     bcrypt.genSalt(saltRounds)
                         .then(salt => {
@@ -59,7 +52,7 @@ function db_initSetting() {
                             superuser[2] = hash
                             conn_init3.query(sql_addSuperuser, superuser, err => {
                                 conn_init3.destroy();
-                                if (err) reject(err);
+                                if (err) return reject(err);
                                 resolve();
                             })
                         })

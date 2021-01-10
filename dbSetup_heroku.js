@@ -1,6 +1,8 @@
 const mysql = require('mysql');
 const dbSetting = require('./models/settings/dbConnectionSettings')
 const sqls = require('./models/settings/sqlDispenser')
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 
 let settingObj = {
     host: dbSetting.host,
@@ -11,14 +13,40 @@ let settingObj = {
     multipleStatements: true,
 }
 
+const sql_addSuperuser =
+    `insert into user(name,email,password,conversionid,help,admin) 
+    values(?,?,?,?,?,?);`
+
+// maybe... need to make conversionId nullable?
+let superuser = [
+    'superuser',
+    'superuser@gpa.com',
+    process.env.SUPERUSER_PASSWORD,
+    1, 0, 1,
+]
+
 function db_initSetting() {
     return new Promise((resolve, reject) => {
         const conn = mysql.createConnection(settingObj)
         conn.connect();
         conn.query(sqls.createDummy, err => {
-            conn.destroy();
-            if (err) throw err;
-            resolve()
+            if (err) {
+                conn_init3.destroy()
+                return reject(err)
+            }
+            bcrypt.genSalt(saltRounds)
+                .then(salt => {
+                    return bcrypt.hash(superuser[2], salt)
+                })
+                .then(hash => {
+                    superuser[2] = hash
+                    conn_init3.query(sql_addSuperuser, superuser, err => {
+                        conn_init3.destroy();
+                        if (err) return reject(err);
+                        resolve();
+                    })
+                })
+                .catch(err => reject(err))
         })
     })
 }
