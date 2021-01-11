@@ -6,9 +6,17 @@ module.exports = {
     jwtSign: result => {
         if (!result) return Promise.resolve(false)
         return new Promise((resolve, reject) => {
-            delete result.password
             jwt.sign(
-                result,
+                // cannot simply put result
+                // jwt payload must be a plain object
+                {
+                    id: result.id,
+                    name: result.name,
+                    email: result.email,
+                    conversionId: result.conversionid,
+                    help: result.help,
+                    isAdmin: result.admin,
+                },
                 jwtSettings.secret,
                 jwtSettings.claims,
                 (err, token) => {
