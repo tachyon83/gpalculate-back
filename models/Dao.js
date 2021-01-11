@@ -81,7 +81,6 @@ class Dao {
             q.year,
             q.season,
         ]
-        info = info.concat(info)
         return this.sqlHandler(sqls.sql_addSemester, info)
     }
     deleteSemester = id => {
@@ -96,7 +95,6 @@ class Dao {
             q.grade,
             q.include,
         ]
-        info = info.concat(info)
         return this.sqlHandler(sqls.sql_addCourse, info)
     }
     modifyCourse = q => {
@@ -122,7 +120,6 @@ class Dao {
             q.totalScore,
             q.weight,
         ]
-        info = info.concat(info)
         return this.sqlHandler(sqls.sql_addAssessment, info)
     }
     modifyAssessment = q => {

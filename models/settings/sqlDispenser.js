@@ -234,16 +234,14 @@ let sql_help =
 
 let sql_addSemester =
     `insert into ${dbSetting.table_semester}(userId,year,season) 
-    select ?,?,? where not exists (select * from ${dbSetting.table_semester} 
-    where userid=? and year=? and season=?);`
+    values(?,?,?);`
 
 let sql_deleteSemester =
     `delete from ${dbSetting.table_semester} where id = ?;`
 
 let sql_addCourse =
     `insert into ${dbSetting.table_course}(semesterid,name,units,grade,include) 
-    select ?,?,?,?,? where not exists (select * from ${dbSetting.table_course} 
-    where semesterid=? and name=? and units=? and grade=? and include=?);`
+    values(?,?,?,?,?);`
 
 let sql_modifyCourse =
     `update ${dbSetting.table_course} set semesterid=?, 
@@ -254,8 +252,7 @@ let sql_deleteCourse =
 
 let sql_addAssessment =
     `insert into ${dbSetting.table_assessment}(courseid,name,receivedscore,totalscore,weight) 
-    select ?,?,?,?,? where not exists (select * from ${dbSetting.table_assessment} 
-    where courseid=? and name=? and receivedscore=? and totalscore=? and weight=?);`
+    values(?,?,?,?,?);`
 
 let sql_modifyAssessment =
     `update ${dbSetting.table_assessment} set courseid=?, 
