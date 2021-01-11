@@ -1,5 +1,5 @@
 const dao = require('../models/Dao')
-const jwt = require('jsonwebtoken')
+const jwtSign = (require('../utils/jwtUtil')).jwtSign
 const bcrypt = require('bcrypt');
 const saltRounds = 10
 
@@ -100,7 +100,6 @@ module.exports = {
     login: (req, res) => {
         const { email, password } = req.body
         const resCode = req.app.get('resCode')
-        const jwtSettings = req.app.get('jwtSettings')
 
         const pwCheck = result => {
             result = result[0]
@@ -153,34 +152,6 @@ module.exports = {
             })
         }
 
-        const sign = result => {
-            return new Promise((resolve, reject) => {
-                if (!result) {
-                    resolve(false)
-                    return
-                }
-                jwt.sign({
-                    id: result.id,
-                    name: result.name,
-                    email: result.email,
-                    conversionId: result.conversionid,
-                    isAdmin: result.admin,
-                }, jwtSettings.secret, {
-                    expiresIn: jwtSettings.expiresIn,
-                    issuer: jwtSettings.issuer,
-                    subject: jwtSettings.subject,
-                }, (err, token) => {
-                    if (err) {
-                        console.log('err while signing', err)
-                        reject(err)
-                        return
-                    }
-                    result.token = token
-                    resolve(result)
-                })
-            })
-        }
-
         const responseHandler = result => {
             if (!result.token) {
                 res.json({
@@ -215,7 +186,7 @@ module.exports = {
         dao.findByEmail(email)
             .then(pwCheck)
             .then(addConversion)
-            .then(sign)
+            .then(jwtSign)
             .then(responseHandler)
             .catch(errorHandler)
     },
@@ -226,7 +197,6 @@ module.exports = {
         // re issue and sign jwt
 
         const resCode = req.app.get('resCode')
-        const jwtSettings = req.app.get('jwtSettings')
         req.body.id = req.userInfo.id
 
         const refind = result => {
@@ -269,29 +239,6 @@ module.exports = {
             })
         }
 
-        const sign = result => {
-            if (!result) return Promise.resolve(false)
-            return new Promise((resolve, reject) => {
-                jwt.sign({
-                    id: result.id,
-                    name: result.name,
-                    email: result.email,
-                    conversionId: result.conversionid,
-                }, jwtSettings.secret, {
-                    expiresIn: jwtSettings.expiresIn,
-                    issuer: jwtSettings.issuer,
-                    subject: jwtSettings.subject,
-                }, (err, token) => {
-                    if (err) {
-                        console.log('err while signing', err)
-                        return reject(err)
-                    }
-                    result.token = token
-                    resolve(result)
-                })
-            })
-        }
-
         const responseHandler = result => {
             if (!result) {
                 res.json({
@@ -326,7 +273,7 @@ module.exports = {
         dao.modifyById(req.body)
             .then(refind)
             .then(addConversion)
-            .then(sign)
+            .then(jwtSign)
             .then(responseHandler)
             .catch(errorHandler)
     }
