@@ -27,7 +27,7 @@ module.exports = (req, res, next) => {
         })
         .catch(err => res.json({
             result: false,
-            code: resCode.error,
+            code: resCode.notAuthenticated,
             data: null,
         }))
 }
