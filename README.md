@@ -9,6 +9,7 @@
 https://gpalculate.herokuapp.com   
 gpalucuate는 gpa와 calculate의 합성어입니다.   
 본 프로젝트의 기획 및 설계에 사용한 문서 링크입니다   
+https://www.notion.so/Gpalculate-c60a7acfb1dc4ebdb2abb7c95603dc72   
 https://www.notion.so/Gpalculate-2f966c34df6e491c99bd2e3811ca6a26   
 
 로그인할 수 있는 관리자 계정:   
